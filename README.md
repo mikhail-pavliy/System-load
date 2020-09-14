@@ -51,8 +51,11 @@ mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
 VG     #PV #LV #SN Attr   VSize   VFree
 OtusRoot    1   3   0 wz--n- 125.80g 4.00m
 # 3. Добавить модуль в initrd
+
 Скрипты модулей хранятся в каталоге /usr/lib/dracut/modules.d/. Для того чтобы добавить свой модуль создаем там папку с именем 01test:
+
 [root@localhost ~]# mkdir /usr/lib/dracut/modules.d/01test
+
 В нее поместим два скрипта:
 
 1.module-setup.sh - который устанавливает модуль и вызывает скрипт test.sh
@@ -60,6 +63,7 @@ OtusRoot    1   3   0 wz--n- 125.80g 4.00m
 2.test.sh - собственно сам вызываемый скрипт, в нём у нас рисуется пингвинчик.
 
 [root@localhost 01test]# ls -a
+
 .  ..  module-setup.sh  test.sh
 
 В скрипт module-setup.sh вписываем:
