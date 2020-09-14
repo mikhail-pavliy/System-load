@@ -61,7 +61,10 @@ OtusRoot    1   3   0 wz--n- 125.80g 4.00m
 
 [root@localhost 01test]# ls -a
 .  ..  module-setup.sh  test.sh
+
 В скрипт module-setup.sh вписываем:
+
+#
 check() {
     return 0
 }
@@ -92,8 +95,10 @@ Hello! You are in dracut module!
 msgend
 sleep 10
 echo " continuing...."
-
+#
 
 Теперь пересоберем образ initrd
+
 mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
+
 после чего перезагружаемся и смотрим на нашего пингвина
