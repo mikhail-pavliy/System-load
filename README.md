@@ -64,19 +64,24 @@ OtusRoot    1   3   0 wz--n- 125.80g 4.00m
 
 В скрипт module-setup.sh вписываем:
 
-#
-check() {
+
+check() { # Функция, которая указывает что модуль должен быть включен по умолчанию
     return 0
 }
 
-depends() {
+depends() { # Выводит все зависимости от которых зависит наш модуль
     return 0
 }
 
 install() {
-    inst_hook cleanup 00 "${moddir}/test.sh"
-}
-В скрипт test.sh вписываем:
+    inst_hook cleanup 00 "${moddir}/test.sh" # Запускает скрипт
+}```  
+
+
+В файле test.sh:
+ 
+```#!/bin/bash
+
 exec 0<>/dev/console 1<>/dev/console 2<>/dev/console
 cat <<'msgend'
 Hello! You are in dracut module!
@@ -94,8 +99,9 @@ Hello! You are in dracut module!
     \___)=(___/
 msgend
 sleep 10
-echo " continuing...."
-#
+echo " continuing...."   
+
+
 
 Теперь пересоберем образ initrd
 
