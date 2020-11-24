@@ -46,6 +46,7 @@ touch /.autorelabel
 # 1.3 Способ 3. rw init=/sysroot/bin/sh
 В  строке начинающейся с linux16 заминяем  ro на rw init=/sysroot/bin/sh и нажимаем сtrl-x для загрузки в систему
 От прошлого примера отличается только тем, что файловая система сразу смонтирована в режим Read-Write
+
 # 2. Установить систему с LVM, после чего переименовать VG
 ```ruby
 [root@localhost ~]# vgs
@@ -139,3 +140,44 @@ echo " continuing...."
 mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
 ````
 после чего перезагружаемся и смотрим на нашего пингвина
+# 4.  Сконфигурировать систему без отдельного раздела с /boot, а только с LVM
+Готвоим vagrant файл
+командой lsblk смотрим наш конфиг после создания машины
+```ruby
+[vagrant@sytemload ~]$ lsblk
+NAME   MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+sda      8:0    0  40G  0 disk
+└─sda1   8:1    0  40G  0 part /
+sdb      8:16   0   1G  0 disk
+```
+устанавливаем пропатченный grub
+```ruby
+[root@sytemload vagrant]# yum-config-manager --add-repo=https://yum.rumyantsev.com/centos/7/x86_64/
+Loaded plugins: fastestmirror
+adding repo from: https://yum.rumyantsev.com/centos/7/x86_64/
+
+[yum.rumyantsev.com_centos_7_x86_64_]
+name=added from: https://yum.rumyantsev.com/centos/7/x86_64/
+baseurl=https://yum.rumyantsev.com/centos/7/x86_64/
+enabled=1
+```
+Смотрю названия дисков в системе
+```ruby
+[root@sytemload vagrant]# fdisk -l
+
+Disk /dev/sda: 42.9 GB, 42949672960 bytes, 83886080 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x0009ef1a
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048    83886079    41942016   83  Linux
+
+Disk /dev/sdb: 1073 MB, 1073741824 bytes, 2097152 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+```
+делаем операцию с дискми
