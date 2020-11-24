@@ -109,7 +109,8 @@ install() {
 
 
 В файле test.sh:
- 
+```ruby
+
 ```#!/bin/bash
 
 exec 0<>/dev/console 1<>/dev/console 2<>/dev/console
@@ -131,10 +132,10 @@ msgend
 sleep 10
 echo " continuing...."   
 
-
+```
 
 Теперь пересоберем образ initrd
-
+```ruby
 mkinitrd -f -v /boot/initramfs-$(uname -r).img $(uname -r)
-
+````
 после чего перезагружаемся и смотрим на нашего пингвина
