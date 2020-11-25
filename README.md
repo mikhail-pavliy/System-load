@@ -181,3 +181,39 @@ Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
 ```
 делаем операцию с дискми
+```ruby
+[root@sytemload vagrant]# pvcreate /dev/sdb --bootloaderareasize 1m
+  Physical volume "/dev/sdb" successfully created.
+```
+```ruby
+[root@sytemload vagrant]# vgcreate otus /dev/sdb
+```
+```ruby
+[root@sytemload vagrant]# lvcreate -L 256mb -n swap otus
+  Logical volume "swap" created.
+  ```
+ ```ruby
+ [root@sytemload vagrant]# lvcreate -l+100%FREE -n root otus
+  Logical volume "root" created.
+  Volume group "otus" successfully created
+  ```
+  далее работаем с файловой системой
+  
+   ```ruby
+mkfs.xfs /dev/otus/root
+mkswap /dev/otus/swap
+mount /dev/otus/root /mnt
+```
+устанавливаем xfsdump
+```ruby
+yum install -y xfsdump
+xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+cp -aR /boot/* /mnt/boot/ 
+```
+монитруемся, далее прописываем в fstab, все дальнейшие  шаги описаны в прикрепленном скрипте 
+
+
+
+
+
+  
